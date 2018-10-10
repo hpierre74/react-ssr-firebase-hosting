@@ -1,5 +1,9 @@
 {
-  "presets":[
-      "es2015", "react"
+  "presets": ["@babel/preset-react", "@babel/preset-env"],
+  "plugins": [
+    "@babel/plugin-transform-async-to-generator",
+    "@babel/plugin-transform-modules-commonjs",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-optional-catch-binding"
   ]
 }

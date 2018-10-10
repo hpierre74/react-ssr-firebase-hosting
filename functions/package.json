@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": "8"
+  },
   "dependencies": {
-    "express": "^4.15.4",
-    "firebase-admin": "^5.2.1",
-    "firebase-functions": "^0.6.2",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "isomorphic-fetch": "^2.2.1"
+    "express": "^4.16.3",
+    "firebase-admin": "^6.0.0",
+    "firebase-functions": "^2.0.5",
+    "isomorphic-fetch": "^2.2.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
   }
 }

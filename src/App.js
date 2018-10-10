@@ -1,23 +1,12 @@
-import React from 'react';
-import { render } from 'react-dom';
+import React from "react";
+import Header from "./components/header";
 
-export default function App(props) {
-  function handleClick(fact) {
-    return function(e) {
-      e.preventDefault();
-      console.log(fact);
-    }
-  }
-  const items = props.facts.map((fact, i) => {
-    return (
-      <li key={i}>
-        <a href="#" onClick={handleClick(fact)}>
-          {fact.text}
-        </a>
-      </li>
-    )
-  });
+const App = ({ facts }) => {
   return (
-    <ul> {items} </ul>
+    <div>
+      <Header facts={facts} />
+    </div>
   );
-}
+};
+
+export default App;

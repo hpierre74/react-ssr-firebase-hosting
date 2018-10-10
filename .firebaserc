@@ -1,7 +1,5 @@
 {
   "projects": {
-    "default": "non-ssr-react",
-    "ssr": "ssr-react",
-    "nonssr": "non-ssr-react"
+    "default": "ssr-dev-test"
   }
 }

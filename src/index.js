@@ -1,8 +1,10 @@
-import React from 'react';
-import { render } from 'react-dom';
-import App from './App';
-import getFacts from './facts';
+import React from "react";
+import { hydrate } from "react-dom";
+import App from "./App";
+import Database from "./database";
 
-getFacts().then(facts => {
-  render(<App facts={facts} />, document.getElementById('root'));  
-});  
+const db = new Database("https://ssr-dev-test.firebaseio.com");
+
+db.get("facts").then(facts => {
+  hydrate(<App facts={facts} />, document.getElementById("root"));
+});
