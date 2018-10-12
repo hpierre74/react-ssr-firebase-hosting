@@ -1,7 +1,10 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Header from "./components/header";
-import Button from "@material-ui/core/Button";
+
+import { Switch, Route } from "react-router-dom";
+import Home from "./modules/home/home.connector";
+import { PageA } from "./pages/a.page";
+import { PageB } from "./pages/b.page";
 
 const styles = theme => ({
   root: {
@@ -11,12 +14,11 @@ const styles = theme => ({
 
 const App = props => {
   return (
-    <div className={props.classes.root}>
-      <Button variant="outlined" color="primary">
-        Button
-      </Button>
-      <Header facts={props.facts} />
-    </div>
+    <Switch>
+      <Route exact path="/a" component={PageA} />
+      <Route exact path="/b" component={PageB} />
+      <Route exact path="/" component={Home} />
+    </Switch>
   );
 };
 

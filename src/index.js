@@ -1,5 +1,16 @@
 import React, { Component } from "react";
 import { hydrate } from "react-dom";
+
+import { createStore, applyMiddleware, combineReducers, compose } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import {
+  ConnectedRouter,
+  connectRouter,
+  routerMiddleware as createRouterMiddleware
+} from "connected-react-router";
+import createHistory from "history/createBrowserHistory";
+
 import JssProvider from "react-jss/lib/JssProvider";
 import {
   MuiThemeProvider,
@@ -10,6 +21,7 @@ import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
 import App from "./App";
 import Database from "./database";
+import reducers from "./reducers";
 
 class Main extends Component {
   constructor(props) {
@@ -30,6 +42,19 @@ class Main extends Component {
 const db = new Database("https://ssr-dev-test.firebaseio.com");
 
 db.get("facts").then(facts => {
+  const history = createHistory();
+  const routerMiddleware = createRouterMiddleware(history);
+
+  /* eslint-disable-next-line no-underscore-dangle */
+  const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+  const store = createStore(
+    connectRouter(history)(combineReducers(reducers)),
+    composeEnhancers(applyMiddleware(thunk, routerMiddleware))
+  );
+  store.dispatch({ type: "first try" });
+
   // Create a theme instance.
   const theme = createMuiTheme({
     palette: {
@@ -43,11 +68,15 @@ db.get("facts").then(facts => {
   const generateClassName = createGenerateClassName();
 
   hydrate(
-    <JssProvider generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme}>
-        <Main facts={facts} />
-      </MuiThemeProvider>
-    </JssProvider>,
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <JssProvider generateClassName={generateClassName}>
+          <MuiThemeProvider theme={theme}>
+            <Main facts={facts} />
+          </MuiThemeProvider>
+        </JssProvider>
+      </ConnectedRouter>
+    </Provider>,
     document.querySelector("#root")
   );
 });
