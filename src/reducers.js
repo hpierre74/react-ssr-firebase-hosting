@@ -1,8 +1,3 @@
-const initialState = {
-  initial: "test"
-};
-const rootReducer = (state = initialState, action) => {
-  return state;
-};
+import app from './modules/app/app.reducer';
 
-export default rootReducer;
+export default { app };

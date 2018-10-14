@@ -1,4 +1,5 @@
-import { push } from "connected-react-router";
+import { push } from 'connected-react-router';
 
-export const pushTo = destination => dispatch =>
-  dispatch(push(`${destination}`));
+export const pushTo = destination => dispatch => dispatch(push(`${destination}`));
+
+export default pushTo;

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import Home from './home.component';
+import PageB from './b.page';
 import { pushTo } from '../../utils/routing.utils';
 
 const mapStateToProps = ({ app: { config } }) => ({
@@ -9,4 +9,4 @@ const mapStateToProps = ({ app: { config } }) => ({
 
 export default connect(mapStateToProps, {
   navigate: destination => pushTo(destination),
-})(Home);
+})(PageB);
