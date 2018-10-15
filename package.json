@@ -31,6 +31,7 @@
     "@material-ui/icons": "^3.0.1",
     "compression": "^1.7.3",
     "connected-react-router": "^4.5.0",
+    "dotenv": "^6.1.0",
     "history": "^4.7.2",
     "html-minifier": "^3.5.20",
     "isomorphic-fetch": "^2.2.1",
@@ -42,7 +43,8 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^3.4.10"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -54,6 +56,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
+    "babel-plugin-styled-components": "^1.8.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "eslint-plugin-m6web-tools": "^1.4.0",

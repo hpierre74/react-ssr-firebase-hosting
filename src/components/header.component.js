@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Nav from './nav.component';
+import Nav from '../modules/nav/nav.connector';
 
 class Header extends Component {
   constructor(props) {

@@ -2,6 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+// import styled from 'styled-components';
 
 import Header from '../../components/header.component';
 
@@ -11,14 +12,24 @@ const styles = () => ({
   },
 });
 
+// const Title = styled.h2`
+//   background: red;
+//   width: 50%;
+//   margin: 0 auto;
+// `;
+
 const Home = props => {
   const { navigate, classes } = props;
 
   return (
     <div className={classes.root}>
       <Header />
+      <h1>Page Title</h1>
       <Button onClick={() => navigate('/a')} variant="outlined" color="primary">
         PageA
+      </Button>
+      <Button onClick={() => navigate('/contact')} variant="outlined" color="default">
+        Contact
       </Button>
       <Button onClick={() => navigate('/b')} variant="outlined" color="secondary">
         PageB

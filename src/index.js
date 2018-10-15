@@ -14,8 +14,9 @@ import red from '@material-ui/core/colors/red';
 import App from './App';
 import Database from './database';
 import reducers from './reducers';
+import configuration from './config/index';
 
-import { configInit } from './modules/app/app.action';
+import { configInit, setContent } from './modules/app/app.action';
 
 class Main extends Component {
   // Remove the server-side injected CSS.
@@ -30,7 +31,8 @@ class Main extends Component {
     return <App />;
   }
 }
-const db = new Database('https://ssr-dev-test.firebaseio.com');
+const { databaseUrl } = configuration;
+const db = new Database(databaseUrl);
 
 db.get('public').then(publicData => {
   const { content, config } = publicData;
@@ -39,13 +41,14 @@ db.get('public').then(publicData => {
   const routerMiddleware = createRouterMiddleware(history);
 
   /* eslint-disable-next-line no-underscore-dangle */
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
   const store = createStore(
     connectRouter(history)(combineReducers(reducers)),
     composeEnhancers(applyMiddleware(thunk, routerMiddleware)),
   );
   store.dispatch(configInit(config));
+  store.dispatch(setContent(content));
 
   // Create a theme instance.
   const theme = createMuiTheme({
@@ -53,6 +56,11 @@ db.get('public').then(publicData => {
       primary: green,
       accent: red,
       type: 'light',
+    },
+    props: {
+      MuiButtonBase: {
+        disableRipple: true,
+      },
     },
   });
 

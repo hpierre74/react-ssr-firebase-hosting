@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 
-import Home from './home.component';
+import Contact from './contact.component';
 import { pushTo } from '../../utils/routing.utils';
 
-const mapStateToProps = ({ app: { config, content } }) => ({
-  config,
+const mapStateToProps = ({ app: { content } }) => ({
   content,
+  intro: 'lolilol',
 });
 
 export default connect(mapStateToProps, {
   navigate: destination => pushTo(destination),
-})(Home);
+})(Contact);

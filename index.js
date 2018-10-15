@@ -15,6 +15,7 @@ import { connectRouter, routerMiddleware as createRouterMiddleware } from 'conne
 import { StaticRouter } from 'react-router';
 
 // styles
+import { ServerStyleSheet } from 'styled-components';
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
@@ -25,14 +26,15 @@ import red from '@material-ui/core/colors/red';
 import App from './src/App';
 import Database from './src/database';
 import reducers from './src/reducers';
+import configuration from './src/config/index';
 
-import { configInit } from './src/modules/app/app.action';
+import { configInit, setContent } from './src/modules/app/app.action';
 
-function renderFullPage(html, css, meta) {
+function renderFullPage({ html, css, styledCss, meta }) {
   return `
   <!DOCTYPE html>
   <html lang="${meta.lang}">
-  
+
   <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -44,13 +46,14 @@ function renderFullPage(html, css, meta) {
   <title>${meta.title}</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   </head>
-  
+
   <body>
   <script async src="bundle.js"></script>
   <div id="root">${html}</div>
   <style id="jss-server-side">${css}</style>
+  ${styledCss}
   </body>
-  
+
   </html>
   `;
 }
@@ -73,13 +76,12 @@ function handleRender(req, res, publicData) {
     composeEnhancers(applyMiddleware(thunk, routerMiddleware)),
   );
   store.dispatch(configInit(config));
+  store.dispatch(setContent(content));
 
   // Create a sheetsRegistry instance.
   const sheetsRegistry = new SheetsRegistry();
-
   // Create a sheetsManager instance.
   const sheetsManager = new Map();
-
   // Create a theme instance.
   const theme = createMuiTheme({
     palette: {
@@ -87,36 +89,48 @@ function handleRender(req, res, publicData) {
       accent: red,
       type: 'light',
     },
+    props: {
+      MuiButtonBase: {
+        disableRipple: true,
+      },
+    },
   });
-
   // Create a new class name generator.
   const generateClassName = createGenerateClassName();
+  // styled components
+  const sheet = new ServerStyleSheet();
 
   const context = {};
   // Render the component to a string.
   const html = ReactDOMServer.renderToString(
-    <Provider store={store}>
-      <StaticRouter location={req.url} context={context}>
-        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
-          <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-            <App content={content} />
-          </MuiThemeProvider>
-        </JssProvider>
-      </StaticRouter>
-    </Provider>,
+    sheet.collectStyles(
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={context}>
+          <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+            <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
+              <App content={content} />
+            </MuiThemeProvider>
+          </JssProvider>
+        </StaticRouter>
+      </Provider>,
+    ),
   );
+  // Grab the CSS from our the styledSheet.
+  const styledCss = sheet.getStyleTags();
 
-  // Grab the CSS from our sheetsRegistry.
+  // Grab the CSS from the sheetsRegistry.
   const css = sheetsRegistry.toString();
 
   // Send the rendered page back to the client.
   res.set('Cache-Control', 'no-cache');
-  res.send(renderFullPage(html, css, meta));
+  res.send(renderFullPage({ html, css, styledCss, meta }));
 }
 const app = express();
 app.use(compression());
 app.get('**', (req, res) => {
-  const db = new Database('https://ssr-dev-test.firebaseio.com');
+  // const db = new Database('https://ssr-dev-test.firebaseio.com');
+  const { databaseUrl } = configuration;
+  const db = new Database(databaseUrl);
 
   return db
     .get('public')
@@ -128,8 +142,10 @@ app.get('**', (req, res) => {
       res.status(500).end();
     });
 });
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(3006, () => {
+    console.log('Listening on 3006.');
+  });
+}
 /* eslint-disable-next-line import/prefer-default-export */
 export const ssrapp = functions.https.onRequest(app);
-// app.listen(3006, () => {
-//   console.log('Listening on 3006.');
-// });
