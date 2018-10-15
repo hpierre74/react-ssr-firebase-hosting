@@ -1,4 +1,4 @@
-import fetch from "isomorphic-fetch";
+import fetch from 'isomorphic-fetch';
 
 class Database {
   constructor(baseUrl) {
@@ -11,22 +11,20 @@ class Database {
 
   post(ref, body) {
     const options = {
-      method: "POST",
-      body
+      method: 'POST',
+      body,
     };
-    return fetch(`${this.baseUrl}/${ref}.json`, options).then(res =>
-      res.json()
-    );
+
+    return fetch(`${this.baseUrl}/${ref}.json`, options).then(res => res.json());
   }
 
   put(ref, body) {
     const options = {
-      method: "POST",
-      body
+      method: 'POST',
+      body,
     };
-    return fetch(`${this.baseUrl}/${ref}.json`, options).then(res =>
-      res.json()
-    );
+
+    return fetch(`${this.baseUrl}/${ref}.json`, options).then(res => res.json());
   }
 }
 export default Database;
