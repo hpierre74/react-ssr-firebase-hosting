@@ -33,13 +33,13 @@ const Home = props => {
       <Hero>
         <Text>Some Random Text to Fill Blank Space</Text>
       </Hero>
-      <Button onClick={() => navigate('/a')} variant="outlined" color="primary">
+      <Button onClick={() => navigate()} variant="outlined" color="primary">
         PageA
       </Button>
-      <Button onClick={() => navigate('/contact')} variant="outlined" color="default">
+      <Button onClick={() => navigate()} variant="outlined" color="default">
         Contact
       </Button>
-      <Button onClick={() => navigate('/b')} variant="outlined" color="secondary">
+      <Button onClick={() => navigate()} variant="outlined" color="secondary">
         PageB
       </Button>
     </div>

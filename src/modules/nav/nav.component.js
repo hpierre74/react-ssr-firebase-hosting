@@ -37,7 +37,7 @@ class Nav extends React.Component {
     }
 
     return Object.values(pages).map(page => (
-      <MenuItem key={page.key} onClick={() => this.props.navigate(page.path)}>
+      <MenuItem key={page.key} onClick={() => this.props.navigate()}>
         {page.name}
       </MenuItem>
     ));

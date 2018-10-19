@@ -61,20 +61,10 @@ function renderFullPage({ html, css, styledCss, meta }) {
 function handleRender(req, res, publicData) {
   const { meta, config, content } = publicData;
 
-  // Router
-  const staticRouter = new StaticRouter();
-  staticRouter.props = { location: req.url, context: {}, basename: '' };
-  const { props: { history: staticHistory } } = staticRouter.render();
-
-  const routerMiddleware = createRouterMiddleware(staticHistory);
-
   /* eslint-disable-next-line no-underscore-dangle */
   const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
-  const store = createStore(
-    connectRouter(staticHistory)(combineReducers(reducers)),
-    composeEnhancers(applyMiddleware(thunk, routerMiddleware)),
-  );
+  const store = createStore(combineReducers(reducers), composeEnhancers(applyMiddleware(thunk)));
   store.dispatch(configInit(config));
   store.dispatch(setContent(content));
 
@@ -107,20 +97,15 @@ function handleRender(req, res, publicData) {
   // styled components
   const sheet = new ServerStyleSheet();
 
-  const context = {};
   // Render the component to a string.
   const html = ReactDOMServer.renderToString(
     sheet.collectStyles(
       <Provider store={store}>
-        <StaticRouter location={req.url} context={context}>
-          <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
-            <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-              <Layout>
-                <App content={content} />
-              </Layout>
-            </MuiThemeProvider>
-          </JssProvider>
-        </StaticRouter>
+        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+          <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
+            <App content={content} />
+          </MuiThemeProvider>
+        </JssProvider>
       </Provider>,
     ),
   );
