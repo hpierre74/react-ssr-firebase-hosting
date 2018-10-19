@@ -1,12 +1,13 @@
-import React from "react";
-import Header from "./components/header";
+import React from 'react';
+import Home from './modules/home/home.connector';
+import Contact from './modules/contact/contact.connector';
+import Layout from './components/layout.component';
 
-const App = ({ facts }) => {
-  return (
-    <div>
-      <Header facts={facts} />
-    </div>
-  );
-};
+const App = () => (
+  <Layout>
+    <Home />
+    <Contact />
+  </Layout>
+);
 
 export default App;
