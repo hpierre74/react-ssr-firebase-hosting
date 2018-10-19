@@ -9,14 +9,14 @@ import createHistory from 'history/createBrowserHistory';
 
 import JssProvider from 'react-jss/lib/JssProvider';
 import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
-import green from '@material-ui/core/colors/green';
-import red from '@material-ui/core/colors/red';
 import App from './App';
 import Database from './database';
 import reducers from './reducers';
 import configuration from './config/index';
 
 import { configInit, setContent } from './modules/app/app.action';
+
+import Layout from './components/layout.component';
 
 class Main extends Component {
   // Remove the server-side injected CSS.
@@ -52,10 +52,17 @@ db.get('public').then(publicData => {
 
   // Create a theme instance.
   const theme = createMuiTheme({
-    palette: {
-      primary: green,
-      accent: red,
-      type: 'light',
+    primary: {
+      light: '#757ce8',
+      main: '#3f50b5',
+      dark: '#002884',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
     },
     props: {
       MuiButtonBase: {
@@ -72,7 +79,9 @@ db.get('public').then(publicData => {
       <ConnectedRouter history={history}>
         <JssProvider generateClassName={generateClassName}>
           <MuiThemeProvider theme={theme}>
-            <Main content={content} />
+            <Layout>
+              <Main content={content} />
+            </Layout>
           </MuiThemeProvider>
         </JssProvider>
       </ConnectedRouter>

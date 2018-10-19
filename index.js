@@ -19,8 +19,6 @@ import { ServerStyleSheet } from 'styled-components';
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
-import green from '@material-ui/core/colors/green';
-import red from '@material-ui/core/colors/red';
 
 // App
 import App from './src/App';
@@ -29,6 +27,8 @@ import reducers from './src/reducers';
 import configuration from './src/config/index';
 
 import { configInit, setContent } from './src/modules/app/app.action';
+
+import Layout from './src/components/layout.component';
 
 function renderFullPage({ html, css, styledCss, meta }) {
   return `
@@ -84,10 +84,17 @@ function handleRender(req, res, publicData) {
   const sheetsManager = new Map();
   // Create a theme instance.
   const theme = createMuiTheme({
-    palette: {
-      primary: green,
-      accent: red,
-      type: 'light',
+    primary: {
+      light: '#757ce8',
+      main: '#3f50b5',
+      dark: '#002884',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
     },
     props: {
       MuiButtonBase: {
@@ -108,7 +115,9 @@ function handleRender(req, res, publicData) {
         <StaticRouter location={req.url} context={context}>
           <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
             <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-              <App content={content} />
+              <Layout>
+                <App content={content} />
+              </Layout>
             </MuiThemeProvider>
           </JssProvider>
         </StaticRouter>
@@ -145,6 +154,7 @@ app.get('**', (req, res) => {
 if (process.env.NODE_ENV !== 'production') {
   app.listen(3006, () => {
     console.log('Listening on 3006.');
+    console.info('Visit http://localhost:3006/');
   });
 }
 /* eslint-disable-next-line import/prefer-default-export */
