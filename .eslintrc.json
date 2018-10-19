@@ -1,0 +1,14 @@
+{
+  "extends": "plugin:m6web-tools/m6web",
+  "plugins": ["m6web-tools"],
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "rules": {
+    "import/no-named-as-default-member": "off",
+    "import/no-named-as-default": "off",
+    "no-console": "off"
+  }
+}
